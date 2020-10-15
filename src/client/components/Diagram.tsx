@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import ReactFlow, { removeElements, addEdge } from "react-flow-renderer";
+import ReactFlow, {removeElements, addEdge, Elements} from "react-flow-renderer";
 import DefaultEdge from "./diagram/DefaultEdge";
 import DefaultNode from "./diagram/DefaultNode";
-
+import {Edge} from "./diagram/model/Edge";
+import { Node } from "./diagram/model/Node";
+import { InPort } from "./diagram/model/InPort";
+import { OutPort } from "./diagram/model/OutPort";
 export function Diagram() {
   const nodeTypes = {
     default: DefaultNode,
@@ -11,42 +14,48 @@ export function Diagram() {
     default: DefaultEdge,
   };
 
-  const defaultElements = [
-    {
-      id: "1",
-      data: { label: "Input Node" },
-      position: { x: 250, y: 25 }
-    },
-    // default node
-    {
-      id: "2",
-      // you can also pass a React component as a label
-      data: { label: <div>Default Node</div> },
-      position: { x: 100, y: 125 }
-    },
-    {
-      id: "3",
-      data: { label: "Output Node", name: "ololo" },
-      position: { x: 250, y: 250 }
-    },
-    // animated edge
-    { id: "e1-2", source: "1", target: "2", animated: true},
-    { id: "e2-3", source: "2", target: "3" }
+  const node1 = new Node("Pods labeled app=frontend");
+  node1.setPosition(100, 100);
+  node1.addPort(new InPort("80 TCP"));
+  const node1OutPort =  node1.addPort(new OutPort("Out"));
+
+  const node2 = new Node("Pods labeled app=backend");
+  node2.setPosition(400, 100);
+  const node2Tcp80Port = node2.addPort(new InPort("80 TCP"));
+  const node2OutPort = node2.addPort(new OutPort("Out"));
+
+  const node3 = new Node("Pods labeled app=database");
+  node3.setPosition(400, 100);
+  const node3Tcp3306Port = node3.addPort(new InPort("3306 TCP"));
+  node3.addPort(new OutPort("Out"));
+  node3.setPosition(600, 100);
+
+  const edge1 = new Edge(node1OutPort, node2Tcp80Port);
+  const edge2 = new Edge(node2OutPort, node3Tcp3306Port);
+
+  const newDefault: Elements = [
+      node1,
+      node2,
+      node3,
+      edge1,
+      edge2,
   ];
 
-  const [elements, setElements] = useState(defaultElements);
+  console.log(newDefault);
+  
+  const [elements, setElements] = useState(newDefault);
   // todo
-  // const onElementsRemove = elementsToRemove =>
-  //   setElements(els => removeElements(elementsToRemove, els));
-  // const onConnect = params => setElements(els => addEdge(params, els));
+  const onElementsRemove = elementsToRemove =>
+    setElements(els => removeElements(elementsToRemove, els));
+  const onConnect = params => setElements(els => addEdge(params, els));
 
   return (
     <ReactFlow
       elements={elements}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
-      // onElementsRemove={onElementsRemove}
-      // onConnect={onConnect}
+      onElementsRemove={onElementsRemove}
+      onConnect={onConnect}
     />
   );
 }

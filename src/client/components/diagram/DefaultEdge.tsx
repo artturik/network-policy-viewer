@@ -1,5 +1,5 @@
 import React from "react";
-import {ArrowHeadType, getBezierPath, getMarkerEnd} from "react-flow-renderer";
+import {ArrowHeadType, EdgeProps, getBezierPath, getMarkerEnd} from "react-flow-renderer";
 
 export default function DefaultEdge({
   id,
@@ -12,7 +12,7 @@ export default function DefaultEdge({
   style = {},
   data,
   markerEndId
-}) {
+} : EdgeProps) {
   const edgePath = getBezierPath({
     sourceX,
     sourceY,

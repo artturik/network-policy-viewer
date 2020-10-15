@@ -1,13 +1,11 @@
 import { XYPosition } from "react-flow-renderer";
 import { v4 as uuidv4 } from 'uuid';
+import { NodeData } from "./NodeData";
 import { Port } from "./Port";
+import { Node as NodeInterface } from "react-flow-renderer";
 
-export interface NodeData {
-     name: string,
-     ports: Port[];
-}
 
-export class Node {
+export class Node implements NodeInterface {
      id: string;
      data: NodeData = {
           name: '',
@@ -15,23 +13,25 @@ export class Node {
      }
      position: XYPosition;
 
-     constructor(id?: string) {
+     constructor(name: string, id?: string) {
+          this.data.name = name;
           if(!id){
                id = 'n' + uuidv4();
           }
           this.id = id;
      }
 
-     setPosition(position: XYPosition){
-          this.position = position;
+     setPosition(x: number, y: number){
+          this.position = {
+               x,
+               y,
+          };
      }
 
-     setName(name: string){
-          this.data.name = name;
-     }
-
-     addPort(port: Port){
+     addPort(port: Port): Port {
+          port.setNode(this);
           this.data.ports.push(port);
+          return port;
      }
 
      getPorts(): Port[] {

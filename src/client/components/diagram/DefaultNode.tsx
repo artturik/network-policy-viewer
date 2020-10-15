@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import React, {memo} from 'react';
-import {Handle, NodeProps, Position} from 'react-flow-renderer';
+import {Handle, Position} from 'react-flow-renderer';
+import {NodeProps} from './model/NodeProps';
+import {PortType} from "./model/Port";
 
 export const Title = styled.div`
 		background: rgba(0, 0, 0, 0.3);
@@ -42,15 +44,6 @@ export const Label = styled.div`
 		flex-grow: 1;
 	`;
 
-export const Port = styled.div`
-		width: 15px;
-		height: 15px;
-		background: rgba(white, 0.1);
-		&:hover {
-			background: rgb(192, 255, 0);
-		}
-	`;
-
 export default memo(({ data } : NodeProps) => {
     return (
         <>
@@ -59,44 +52,46 @@ export default memo(({ data } : NodeProps) => {
             </Title>
             <Ports>
                 <PortsContainer>
-                    <PortLabel>
-                        <div>
-                            <Handle
-                                id="a"
-                                className="port"
-                                type="target"
-                                position={Position.Left}
-                                onConnect={(params) => console.log('handle onConnect', params)}
-                            />
-                        </div>
-                        <Label>In</Label>
-                    </PortLabel>
-                    <PortLabel>
-                        <div>
-                            <Handle
-                                id="b"
-                                className="port"
-                                type="target"
-                                position={Position.Left}
-                                onConnect={(params) => console.log('handle onConnect', params)}
-                            />
-                        </div>
-                        <Label>In</Label>
-                    </PortLabel>
+                    { data.ports
+                        .filter(port => port.type === PortType.TARGET)
+                        .map(port => {
+                            return (
+                                <PortLabel key={port.id}>
+                                    <div>
+                                        <Handle
+                                            id={port.id}
+                                            className="port"
+                                            type="target"
+                                            position={Position.Left}
+                                            onConnect={(params) => console.log('handle onConnect', params)}
+                                        />
+                                    </div>
+                                    <Label>{port.name}</Label>
+                                </PortLabel>
+                            );
+                        })
+                    }
                 </PortsContainer>
                 <PortsContainer>
-                    <PortLabel>
-                        <Label>Out</Label>
-                        <div>
-                            <Handle
-                                id="out"
-                                className="port"
-                                type="source"
-                                position={Position.Right}
-                                onConnect={(params) => console.log('handle onConnect', params)}
-                            />
-                        </div>
-                    </PortLabel>
+                    { data.ports
+                        .filter(port => port.type === PortType.SOURCE)
+                        .map(port => {
+                            return (
+                                <PortLabel key={port.id}>
+                                    <Label>{port.name}</Label>
+                                    <div>
+                                        <Handle
+                                            id={port.id}
+                                            className="port"
+                                            type="source"
+                                            position={Position.Right}
+                                            onConnect={(params) => console.log('handle onConnect', params)}
+                                        />
+                                    </div>
+                                </PortLabel>
+                            );
+                        })
+                    }
                 </PortsContainer>
             </Ports>
         </>
