@@ -24,7 +24,7 @@ export class Port {
      }
 
      setNode(node: Node){
-          this.id = `${node.id}__${this.uid}`;
+          // this.id = `${node.id}__${this.uid}`;
           this.node = node;
      }
 

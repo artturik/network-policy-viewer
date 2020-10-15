@@ -8,8 +8,8 @@ export class Edge implements EdgeInterface {
     target: ElementId;
 
     constructor(source: Port, target: Port, id?: string){
-        this.source = source.id;
-        this.target = target.id;
+        this.source = `${source.getNode().id}__${source.id}`;
+        this.target = `${target.getNode().id}__${target.id}`;
         if(!id){
             id = 'e' + uuidv4();
         }

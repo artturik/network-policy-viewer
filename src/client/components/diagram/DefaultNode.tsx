@@ -63,6 +63,7 @@ export default memo(({ data } : NodeProps) => {
                                             className="port"
                                             type="target"
                                             position={Position.Left}
+                                            onConnectStart={(params) => console.log('handle onConnectStart', params)}
                                             onConnect={(params) => console.log('handle onConnect', params)}
                                         />
                                     </div>
@@ -86,6 +87,9 @@ export default memo(({ data } : NodeProps) => {
                                             type="source"
                                             position={Position.Right}
                                             onConnect={(params) => console.log('handle onConnect', params)}
+                                            onConnectStart={(params) => console.log('handle onConnectStart', params)}
+                                            onConnectEnd={(params) => console.log('handle onConnectEnd', params)}
+                                            onConnectStop={(params) => console.log('handle onConnectStop', params)}
                                         />
                                     </div>
                                 </PortLabel>
