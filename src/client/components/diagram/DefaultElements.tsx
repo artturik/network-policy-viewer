@@ -1,7 +1,9 @@
 import {Elements} from "react-flow-renderer";
 import {Edge} from "./model/Edge";
+import {InNode} from "./model/InNode";
 import {InPort} from "./model/InPort";
 import {Node} from "./model/Node";
+import {OutNode} from "./model/OutNode";
 import {OutPort} from "./model/OutPort";
 
 const node1 = new Node("Pods labeled app=frontend");
@@ -23,13 +25,13 @@ node3.setPosition(600, 100);
 const edge1 = new Edge(node1OutPort, node2Tcp80Port);
 const edge2 = new Edge(node2OutPort, node3Tcp3306Port);
 
-const specialEgress = new Node("Special Egress");
+const specialEgress = new InNode("Special Egress");
 specialEgress.setPosition(200, 200);
 specialEgress.addPort(new InPort("Only to External"));
 specialEgress.addPort(new InPort("Only to Cluster"));
 specialEgress.addPort(new InPort("Only to current namespace"));
 
-const specialIngress = new Node("Special Ingress");
+const specialIngress = new OutNode("Special Ingress");
 specialIngress.setPosition(200, 400);
 specialIngress.addPort(new OutPort("Only from External"));
 specialIngress.addPort(new OutPort("Only from Cluster"));

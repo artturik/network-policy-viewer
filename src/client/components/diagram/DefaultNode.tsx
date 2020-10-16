@@ -1,8 +1,11 @@
 import styled from '@emotion/styled';
 import React, {memo} from 'react';
-import {Handle, Position} from 'react-flow-renderer';
+import {Position} from 'react-flow-renderer';
+import Handle from "./hack/handle";
 import {NodeProps} from './model/NodeProps';
 import {PortType} from "./model/Port";
+import { Provider } from './hack/handle/NodeIdContext';
+
 
 export const Title = styled.div`
 		background: rgba(0, 0, 0, 0.3);
@@ -44,9 +47,9 @@ export const Label = styled.div`
 		flex-grow: 1;
 	`;
 
-export default memo(({ data } : NodeProps) => {
+export default memo(({ id, data } : NodeProps) => {
     return (
-        <>
+        <Provider value={id}>
             <Title>
                 <TitleName>{ data.name }</TitleName>
             </Title>
@@ -63,7 +66,10 @@ export default memo(({ data } : NodeProps) => {
                                             className="port"
                                             type="target"
                                             position={Position.Left}
-                                            onConnectStart={(params) => console.log('handle onConnectStart', params)}
+                                            isValidConnection={(connection) => {
+                                                console.log(connection)
+                                                return true;
+                                            }}
                                             onConnect={(params) => console.log('handle onConnect', params)}
                                         />
                                     </div>
@@ -87,9 +93,10 @@ export default memo(({ data } : NodeProps) => {
                                             type="source"
                                             position={Position.Right}
                                             onConnect={(params) => console.log('handle onConnect', params)}
-                                            onConnectStart={(params) => console.log('handle onConnectStart', params)}
-                                            onConnectEnd={(params) => console.log('handle onConnectEnd', params)}
-                                            onConnectStop={(params) => console.log('handle onConnectStop', params)}
+                                            isValidConnection={(connection) => {
+                                                console.log(connection)
+                                                return true;
+                                            }}
                                         />
                                     </div>
                                 </PortLabel>
@@ -98,6 +105,6 @@ export default memo(({ data } : NodeProps) => {
                     }
                 </PortsContainer>
             </Ports>
-        </>
+        </Provider>
     );
 });
