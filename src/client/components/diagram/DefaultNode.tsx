@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React, {memo} from 'react';
-import { Position, Handle } from '../../../react-flow';
+import {Position, Handle, useStoreState} from '../../../react-flow';
 import {NodeProps} from './model/NodeProps';
 import {PortType} from "./model/Port";
 
@@ -44,7 +44,9 @@ export const Label = styled.div`
 		flex-grow: 1;
 	`;
 
-export default memo(({ id, data } : NodeProps) => {
+export default memo(({ data } : NodeProps) => {
+    const connectionHandleType = useStoreState(state => state.connectionHandleType);
+
     return (
         <>
             <Title>
@@ -64,8 +66,7 @@ export default memo(({ id, data } : NodeProps) => {
                                             type="target"
                                             position={Position.Left}
                                             isValidConnection={(connection) => {
-                                                console.log(connection)
-                                                return true;
+                                                return !connection.toTarget;
                                             }}
                                             onConnect={(params) => console.log('handle onConnect', params)}
                                         />
@@ -91,8 +92,7 @@ export default memo(({ id, data } : NodeProps) => {
                                             position={Position.Right}
                                             onConnect={(params) => console.log('handle onConnect', params)}
                                             isValidConnection={(connection) => {
-                                                console.log(connection)
-                                                return true;
+                                                return connection.toTarget;
                                             }}
                                         />
                                     </div>

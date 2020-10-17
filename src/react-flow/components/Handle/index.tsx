@@ -18,6 +18,7 @@ const Handle = ({
   onConnect,
 }: HandleProps) => {
   const nodeId = useContext(NodeIdContext) as ElementId;
+  const setConnectionPending = useStoreActions((actions) => actions.setConnectionPending);
   const setPosition = useStoreActions((actions) => actions.setConnectionPosition);
   const setConnectionNodeId = useStoreActions((actions) => actions.setConnectionNodeId);
   const onConnectAction = useStoreState((state) => state.onConnect);
@@ -41,6 +42,7 @@ const Handle = ({
       className={handleClasses}
       id={id}
       nodeId={nodeId}
+      setConnectionPending={setConnectionPending}
       setPosition={setPosition}
       setConnectionNodeId={setConnectionNodeId}
       onConnect={onConnectExtended}

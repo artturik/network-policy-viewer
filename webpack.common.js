@@ -32,7 +32,22 @@ module.exports = {
                             publicPath: path.resolve(__dirname, 'dist'),
                         },
                     },
-                    'css-loader'
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: [
+                                    [
+                                        'postcss-preset-env',
+                                        {
+                                        },
+                                    ],
+                                    'autoprefixer',
+                                ],
+                            },
+                        },
+                    },
                 ],
             },
             {

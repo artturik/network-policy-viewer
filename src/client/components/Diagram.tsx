@@ -17,8 +17,6 @@ export function Diagram() {
 
   const [elements, setElements] = useState(defaultElements);
 
-  const elementsMap : { [key:string]:FlowElement; } = {};
-
   const onElementsRemove = elementsToRemove =>
     setElements(els => removeElements(elementsToRemove, els));
   const onConnect = params => setElements(els => addEdge(params, els));

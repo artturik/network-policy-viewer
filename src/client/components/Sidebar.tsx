@@ -3,24 +3,22 @@ import { useStoreState, useStoreActions } from '../../react-flow';
 
 export function Sidebar() {
     const nodes = useStoreState((store) => store.nodes);
-    const test = useStoreState((store) => console.log(store));
-
-    const store = useStoreActions((actions) => actions.setOnConnectStart)
+    const connectionIsPending = useStoreState((store) => store.connectionPending);
 
     return (
         <aside
-
             style={{
                 display: 'block',
                 width: '250px',
                 height: '100vh',
                 borderRight: '2px solid',
                 borderColor: 'grays.500',
-                paddingTop: 3
+                paddingTop: 3,
+                color: '#fff',
             }}
         >
             <div className="description">
-                This is an example of how you can access the internal state outside of the ReactFlow component.
+                Connection pending: {connectionIsPending ? 'yes' : 'no'}
             </div>
             <div className="title">Nodes</div>
             {nodes.map((node) => (

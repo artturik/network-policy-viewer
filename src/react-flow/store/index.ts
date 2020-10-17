@@ -28,7 +28,7 @@ import {
   NodeDiffUpdate,
   FitViewParams,
   TranslateExtent,
-  SnapGrid,
+  SnapGrid, FlowElement,
 } from '../types';
 
 type TransformXYK = {
@@ -54,6 +54,7 @@ export interface StoreModel {
   viewportBox: Computed<StoreModel, Rect>;
   transform: Transform;
   elements: Elements;
+  elementsMap: Computed<StoreModel, { [key:string]:FlowElement; }>
   nodes: Computed<StoreModel, Node[]>;
   edges: Computed<StoreModel, Edge[]>;
   selectedElements: Elements | null;
@@ -71,6 +72,7 @@ export interface StoreModel {
 
   userSelectionRect: SelectionRect;
 
+  connectionPending: boolean;
   connectionNodeId: ElementId | null;
   connectionHandleType: HandleType | null;
   connectionPosition: XYPosition;
@@ -89,6 +91,7 @@ export interface StoreModel {
   onConnectStop?: OnConnectStopFunc;
   onConnectEnd?: OnConnectEndFunc;
 
+  setConnectionPending: Action<StoreModel, boolean>;
   setOnConnect: Action<StoreModel, OnConnectFunc>;
   setOnConnectStart: Action<StoreModel, OnConnectStartFunc>;
   setOnConnectStop: Action<StoreModel, OnConnectStopFunc>;
@@ -149,6 +152,10 @@ export const storeModel: StoreModel = {
   viewportBox: computed((state) => ({ x: 0, y: 0, width: state.width, height: state.height })),
   transform: [0, 0, 1],
   elements: [],
+  elementsMap: computed((state) => state.elements.reduce((map, el) => {
+    map[el.id] = el;
+    return map;
+  }, {})),
   nodes: computed((state) => state.elements.filter((el) => isNode(el)) as Node[]),
   edges: computed((state) => state.elements.filter((el) => isEdge(el)) as Edge[]),
   selectedElements: null,
@@ -176,6 +183,7 @@ export const storeModel: StoreModel = {
     height: 0,
     draw: false,
   },
+  connectionPending: false,
   connectionNodeId: null,
   connectionHandleType: 'source',
   connectionPosition: { x: 0, y: 0 },
@@ -189,6 +197,9 @@ export const storeModel: StoreModel = {
 
   reactFlowVersion: typeof __REACT_FLOW_VERSION__ !== 'undefined' ? __REACT_FLOW_VERSION__ : '-',
 
+  setConnectionPending: action((state, isPending) => {
+    state.connectionPending = isPending;
+  }),
   setOnConnect: action((state, onConnect) => {
     state.onConnect = onConnect;
   }),

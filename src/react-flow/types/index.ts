@@ -241,6 +241,7 @@ export type OnLoadFunc = (params: OnLoadParams) => void;
 export interface Connection {
   source: ElementId | null;
   target: ElementId | null;
+  toTarget?: boolean;
 }
 
 export enum ConnectionLineType {
