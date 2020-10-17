@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import ReactFlow, {removeElements, addEdge, ReactFlowProvider} from "react-flow-renderer";
-import {FlowElement} from "react-flow-renderer/dist/types";
+import ReactFlow, {removeElements, addEdge, ReactFlowProvider, FlowElement} from "../../react-flow";
 import DefaultEdge from "./diagram/DefaultEdge";
 import { defaultElements } from "./diagram/DefaultElements";
 import DefaultNode from "./diagram/DefaultNode";

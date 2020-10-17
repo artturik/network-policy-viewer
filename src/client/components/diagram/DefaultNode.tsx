@@ -1,11 +1,8 @@
 import styled from '@emotion/styled';
 import React, {memo} from 'react';
-import {Position} from 'react-flow-renderer';
-import Handle from "./hack/handle";
+import { Position, Handle } from '../../../react-flow';
 import {NodeProps} from './model/NodeProps';
 import {PortType} from "./model/Port";
-import { Provider } from './hack/handle/NodeIdContext';
-
 
 export const Title = styled.div`
 		background: rgba(0, 0, 0, 0.3);
@@ -49,7 +46,7 @@ export const Label = styled.div`
 
 export default memo(({ id, data } : NodeProps) => {
     return (
-        <Provider value={id}>
+        <>
             <Title>
                 <TitleName>{ data.name }</TitleName>
             </Title>
@@ -105,6 +102,6 @@ export default memo(({ id, data } : NodeProps) => {
                     }
                 </PortsContainer>
             </Ports>
-        </Provider>
+        </>
     );
 });

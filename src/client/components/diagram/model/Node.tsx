@@ -1,9 +1,7 @@
-import { XYPosition } from "react-flow-renderer";
 import { v4 as uuidv4 } from 'uuid';
 import { NodeData } from "./NodeData";
 import { Port } from "./Port";
-import { Node as NodeInterface } from "react-flow-renderer";
-
+import { Node as NodeInterface, XYPosition } from "../../../../react-flow";
 
 export class Node implements NodeInterface {
      id: string;

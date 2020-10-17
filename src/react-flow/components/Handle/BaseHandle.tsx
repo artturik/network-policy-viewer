@@ -12,7 +12,7 @@ import {
   OnConnectEndFunc,
   Connection,
   SetConnectionId,
-} from "react-flow-renderer";
+} from '../../types';
 
 type ValidConnectionFunc = (connection: Connection) => boolean;
 type SetSourceIdFunc = (params: SetConnectionId) => void;

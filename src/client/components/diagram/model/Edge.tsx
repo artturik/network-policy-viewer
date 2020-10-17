@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Port } from "./Port";
-import { Edge as EdgeInterface, ElementId } from "react-flow-renderer";
+import { Edge as EdgeInterface, ElementId } from "../../../../react-flow";
 
 export class Edge implements EdgeInterface {
     id: string;

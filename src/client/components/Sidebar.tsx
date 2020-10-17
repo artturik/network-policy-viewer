@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStoreState, useStoreActions } from 'react-flow-renderer';
+import { useStoreState, useStoreActions } from '../../react-flow';
 
 export function Sidebar() {
     const nodes = useStoreState((store) => store.nodes);

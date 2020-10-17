@@ -35,6 +35,10 @@ module.exports = {
                     'css-loader'
                 ],
             },
+            {
+                test: /\.svg$/,
+                use: ['@svgr/webpack'],
+            },
         ],
     },
     plugins: [

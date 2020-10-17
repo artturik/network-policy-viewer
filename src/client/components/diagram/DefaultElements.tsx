@@ -1,4 +1,4 @@
-import {Elements} from "react-flow-renderer";
+import {Elements} from "../../../react-flow";
 import {Edge} from "./model/Edge";
 import {InNode} from "./model/InNode";
 import {InPort} from "./model/InPort";

@@ -1,5 +1,5 @@
 import React from "react";
-import {ArrowHeadType, EdgeProps, getBezierPath, getMarkerEnd} from "react-flow-renderer";
+import {ArrowHeadType, EdgeProps, getBezierPath, getMarkerEnd} from "../../../react-flow";
 
 export default function DefaultEdge({
   id,
