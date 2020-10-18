@@ -3,6 +3,7 @@ import React, {memo} from 'react';
 import {Position, Handle, useStoreState} from '../../../react-flow';
 import {NodeProps} from './model/NodeProps';
 import {PortType} from "./model/Port";
+import cc from 'classcat';
 
 export const Title = styled.div`
 		background: rgba(0, 0, 0, 0.3);
@@ -44,9 +45,13 @@ export const Label = styled.div`
 		flex-grow: 1;
 	`;
 
-export default memo(({ data } : NodeProps) => {
-    const connectionHandleType = useStoreState(state => state.connectionHandleType);
+export default memo(({ data, id } : NodeProps) => {
+    const connectionPending = useStoreState(state => state.connectionPending);
+    const connectionOnlyNodeId = useStoreState(state => state.connectionOnlyNodeId);
 
+    const handleClasses = cc(['port', {
+        "react-flow__handle-connecting" : connectionPending && connectionOnlyNodeId !== id,
+    }]);
     return (
         <>
             <Title>
@@ -62,13 +67,16 @@ export default memo(({ data } : NodeProps) => {
                                     <div>
                                         <Handle
                                             id={port.id}
-                                            className="port"
+                                            className={handleClasses}
                                             type="target"
                                             position={Position.Left}
                                             isValidConnection={(connection) => {
+                                                if(connection.sourceNodeId === connection.targetNodeId){
+                                                    return false;
+                                                }
+
                                                 return !connection.toTarget;
                                             }}
-                                            onConnect={(params) => console.log('handle onConnect', params)}
                                         />
                                     </div>
                                     <Label>{port.name}</Label>
@@ -87,11 +95,14 @@ export default memo(({ data } : NodeProps) => {
                                     <div>
                                         <Handle
                                             id={port.id}
-                                            className="port"
+                                            className={handleClasses}
                                             type="source"
                                             position={Position.Right}
-                                            onConnect={(params) => console.log('handle onConnect', params)}
                                             isValidConnection={(connection) => {
+                                                if(connection.sourceNodeId === connection.targetNodeId){
+                                                    return false;
+                                                }
+
                                                 return connection.toTarget;
                                             }}
                                         />

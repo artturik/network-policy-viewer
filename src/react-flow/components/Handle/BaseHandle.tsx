@@ -1,5 +1,9 @@
-import React, { memo, MouseEvent as ReactMouseEvent, CSSProperties } from 'react';
-import cc from 'classcat';
+import React, {
+  memo,
+  MouseEvent as ReactMouseEvent,
+  CSSProperties
+} from "react";
+import cc from "classcat";
 
 import {
   HandleType,
@@ -11,8 +15,8 @@ import {
   OnConnectStopFunc,
   OnConnectEndFunc,
   Connection,
-  SetConnectionId,
-} from '../../types';
+  SetConnectionId
+} from "../../types";
 
 type ValidConnectionFunc = (connection: Connection) => boolean;
 type SetSourceIdFunc = (params: SetConnectionId) => void;
@@ -54,22 +58,25 @@ function onMouseDown(
   onConnectStop?: OnConnectStopFunc,
   onConnectEnd?: OnConnectEndFunc
 ): void {
-  const reactFlowNode = (event.target as Element).closest('.react-flow');
+  const reactFlowNode = (event.target as Element).closest(".react-flow");
 
   if (!reactFlowNode) {
     return;
   }
 
-  const handleType = isTarget ? 'target' : 'source';
+  const handleType = isTarget ? "target" : "source";
   const containerBounds = reactFlowNode.getBoundingClientRect();
   let recentHoveredHandle: Element;
 
   setPosition({
     x: event.clientX - containerBounds.left,
-    y: event.clientY - containerBounds.top,
+    y: event.clientY - containerBounds.top
   });
   setConnectionPending(true);
-  setConnectionNodeId({ connectionNodeId: nodeId, connectionHandleType: handleType });
+  setConnectionNodeId({
+    connectionNodeId: nodeId,
+    connectionHandleType: handleType
+  });
 
   if (onConnectStart) {
     onConnectStart(event, { nodeId, handleType });
@@ -80,33 +87,57 @@ function onMouseDown(
       return;
     }
 
-    recentHoveredHandle.classList.remove('react-flow__handle-valid');
-    recentHoveredHandle.classList.remove('react-flow__handle-connecting');
+    recentHoveredHandle.classList.remove("react-flow__handle-valid");
+    recentHoveredHandle.classList.remove("react-flow__handle-invalid");
   }
 
   // checks if element below mouse is a handle and returns connection in form of an object { source: 123, target: 312 }
   function checkElementBelowIsValid(event: MouseEvent) {
-    const elementBelow = document.elementFromPoint(event.clientX, event.clientY);
+    const elementBelow = document.elementFromPoint(
+      event.clientX,
+      event.clientY
+    );
 
     const result: Result = {
       elementBelow,
       isValid: false,
-      connection: { source: null, target: null, toTarget: null },
-      isHoveringHandle: false,
+      connection: {
+        source: null,
+        sourceNodeId: null,
+        targetNodeId: null,
+        target: null,
+        toTarget: null
+      },
+      isHoveringHandle: false
     };
 
-    const elementBelowTarget = elementBelow && elementBelow.classList.contains('target');
-    const elementBelowSource = elementBelow && elementBelow.classList.contains('source');
+    const elementBelowTarget =
+      elementBelow && elementBelow.classList.contains("target");
+    const elementBelowSource =
+      elementBelow && elementBelow.classList.contains("source");
 
     if (elementBelowTarget || elementBelowSource) {
-      let connection: Connection = { source: null, target: null };
+      let connection: Connection;
 
+      const elementBelowId = elementBelow.getAttribute("data-nodeid");
+      const elementBelowNodeId = elementBelowId.split("__")?.[0];
+      const onlyNodeId = nodeId.split("__")?.[0];
       if (isTarget) {
-        const sourceId = elementBelow.getAttribute('data-nodeid');
-        connection = { source: sourceId, target: nodeId, toTarget: elementBelowTarget };
+        connection = {
+          source: elementBelowId,
+          sourceNodeId: elementBelowNodeId,
+          target: nodeId,
+          targetNodeId: onlyNodeId,
+          toTarget: elementBelowTarget
+        };
       } else {
-        const targetId = elementBelow.getAttribute('data-nodeid');
-        connection = { source: nodeId, target: targetId, toTarget: elementBelowTarget };
+        connection = {
+          source: nodeId,
+          sourceNodeId: onlyNodeId,
+          target: elementBelowId,
+          targetNodeId: elementBelowNodeId,
+          toTarget: elementBelowTarget
+        };
       }
 
       const isValid = isValidConnection(connection);
@@ -122,10 +153,15 @@ function onMouseDown(
   function onMouseMove(event: MouseEvent) {
     setPosition({
       x: event.clientX - containerBounds.left,
-      y: event.clientY - containerBounds.top,
+      y: event.clientY - containerBounds.top
     });
 
-    const { connection, elementBelow, isValid, isHoveringHandle } = checkElementBelowIsValid(event);
+    const {
+      connection,
+      elementBelow,
+      isValid,
+      isHoveringHandle
+    } = checkElementBelowIsValid(event);
 
     if (!isHoveringHandle) {
       return resetRecentHandle();
@@ -135,8 +171,8 @@ function onMouseDown(
 
     if (!isOwnHandle && elementBelow) {
       recentHoveredHandle = elementBelow;
-      elementBelow.classList.add('react-flow__handle-connecting');
-      elementBelow.classList.toggle('react-flow__handle-valid', isValid);
+      elementBelow.classList.toggle("react-flow__handle-valid", isValid);
+      elementBelow.classList.toggle("react-flow__handle-invalid", !isValid);
     }
   }
 
@@ -159,12 +195,12 @@ function onMouseDown(
     setConnectionPending(false);
     setConnectionNodeId({ connectionNodeId: null, connectionHandleType: null });
 
-    document.removeEventListener('mousemove', onMouseMove);
-    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
   }
 
-  document.addEventListener('mousemove', onMouseMove);
-  document.addEventListener('mouseup', onMouseUp);
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
 }
 
 const BaseHandle = ({
@@ -183,16 +219,16 @@ const BaseHandle = ({
   isValidConnection,
   ...rest
 }: BaseHandleProps) => {
-  const isTarget = type === 'target';
+  const isTarget = type === "target";
   const handleClasses = cc([
-    'react-flow__handle',
+    "react-flow__handle",
     `react-flow__handle-${position}`,
-    'nodrag',
+    "nodrag",
     className,
     {
       source: !isTarget,
-      target: isTarget,
-    },
+      target: isTarget
+    }
   ]);
 
   const nodeIdWithHandleId = id ? `${nodeId}__${id}` : nodeId;
@@ -202,7 +238,7 @@ const BaseHandle = ({
       data-nodeid={nodeIdWithHandleId}
       data-handlepos={position}
       className={handleClasses}
-      onMouseDown={(event) =>
+      onMouseDown={event =>
         onMouseDown(
           event,
           nodeIdWithHandleId,
@@ -222,6 +258,6 @@ const BaseHandle = ({
   );
 };
 
-BaseHandle.displayName = 'BaseHandle';
+BaseHandle.displayName = "BaseHandle";
 
 export default memo(BaseHandle);

@@ -49,6 +49,18 @@
     background: rgb(192, 255, 0);
 }
 
+.react-flow__node-default .port.react-flow__handle-connecting:hover {
+    background: rgb(255, 64, 0);
+}
+
+.react-flow__node-default .port.react-flow__handle-invalid:hover {
+    background: rgb(255, 64, 0);
+}
+
+.react-flow__node-default .port.react-flow__handle-connecting.react-flow__handle-valid:hover {
+    background: rgb(192, 255, 0);
+}
+
 .react-flow__edge-path.path-default {
     stroke-width: 2px;
 }

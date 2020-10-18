@@ -74,6 +74,8 @@ export interface StoreModel {
 
   connectionPending: boolean;
   connectionNodeId: ElementId | null;
+  connectionOnlyNodeId: Computed<StoreModel, string | null>;
+  connectionOnlyPortId: Computed<StoreModel, string | null>;
   connectionHandleType: HandleType | null;
   connectionPosition: XYPosition;
 
@@ -185,6 +187,8 @@ export const storeModel: StoreModel = {
   },
   connectionPending: false,
   connectionNodeId: null,
+  connectionOnlyNodeId: computed((state) => state.connectionNodeId?.split('__')?.[0]),
+  connectionOnlyPortId: computed((state) => state.connectionNodeId?.split('__')?.[1]),
   connectionHandleType: 'source',
   connectionPosition: { x: 0, y: 0 },
 

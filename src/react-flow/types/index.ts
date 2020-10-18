@@ -241,6 +241,8 @@ export type OnLoadFunc = (params: OnLoadParams) => void;
 export interface Connection {
   source: ElementId | null;
   target: ElementId | null;
+  sourceNodeId: string | null;
+  targetNodeId: string | null;
   toTarget?: boolean;
 }
 
