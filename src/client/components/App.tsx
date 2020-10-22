@@ -48,7 +48,7 @@ export function App(){
     return (
         <main style={{ display: 'flex' }}>
             <div id="canvas" style={{ width: '100%' }}>
-                <Diagram />
+                <Diagram policy={parsed} />
             </div>
         </main>
     )

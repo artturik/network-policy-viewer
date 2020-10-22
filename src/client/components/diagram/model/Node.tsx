@@ -32,6 +32,18 @@ export class Node implements NodeInterface {
           return port;
      }
 
+     getPortWithName(name: string) : Port | null {
+          return this.data.ports.find(port => port.name === name);
+     }
+
+     setPorts(ports: Port[]) {
+          this.data.ports = [];
+          ports.forEach(port => {
+               port.setNode(this);
+               this.data.ports.push(port);
+          });
+     }
+
      getPorts(): Port[] {
           return this.data.ports;
      }
