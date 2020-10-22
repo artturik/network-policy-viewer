@@ -1,11 +1,10 @@
 import * as yaml from 'js-yaml';
+import { NetworkPolicy } from "./model/NetworkPolicy";
 
-export function parse(manifest) : object {
+export function parse(manifest: string) : NetworkPolicy {
     try {
-        const doc = yaml.safeLoad(manifest);
-        console.log(doc);
+        return new NetworkPolicy(JSON.stringify(yaml.safeLoad(manifest)));
     } catch (e) {
         console.log(e);
     }
-    return {};
 }

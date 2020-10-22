@@ -44,6 +44,7 @@ spec:
 
 export function App(){
     const parsed = parse(networkPolicy);
+    console.log(parsed)
     return (
         <main style={{ display: 'flex' }}>
             <div id="canvas" style={{ width: '100%' }}>
