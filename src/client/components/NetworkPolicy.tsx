@@ -160,7 +160,7 @@ export class NetworkPolicyPort {
 
     constructor(source: any = {}) {
         if ('string' === typeof source) source = JSON.parse(source);
-        this.protocol = source["protocol"];
+        this.protocol = source["protocol"] || 'TCP';
         this.port = this.convertValues(source["port"], IntOrString);
     }
 

@@ -17,7 +17,7 @@ export function parse(manifest: string): NetworkPolicy {
     try {
         return new NetworkPolicy(JSON.stringify(yaml.safeLoad(manifest)));
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 }
 
@@ -55,7 +55,7 @@ function parseIngressRule(
 ): Elements {
     const elements: Elements = [];
     for (const ingress of ingresses) {
-        if (Object.keys(ingress).length === 0) {
+        if (!ingress.ports && !ingress.from) {
             // From all to target
             //todo special color
             const node = new Node("ALLOW FROM ALL");
@@ -67,15 +67,25 @@ function parseIngressRule(
         }
 
         const inPorts: InPort[] = [];
-        ingress.ports.forEach(port => {
-            const name = `:${port.port} ${port.protocol}`;
+        if(ingress.ports){
+            ingress.ports.forEach(port => {
+                const name = `:${port.port} ${port.protocol}`;
+                let newPort = target.getPortWithName(name);
+                if (!newPort) {
+                    newPort = new InPort(name);
+                    target.addPort(newPort);
+                }
+                inPorts.push(newPort);
+            });
+        } else {
+            const name = "Any In";
             let newPort = target.getPortWithName(name);
             if (!newPort) {
                 newPort = new InPort(name);
                 target.addPort(newPort);
             }
             inPorts.push(newPort);
-        });
+        }
 
         const fromNodes: Node[] = [];
         const fromPorts: OutPort[] = [];
@@ -109,22 +119,27 @@ function parseEgressRule(
         target.addPort(outPort);
     }
     for (const egress of egresses) {
-        if (Object.keys(egress).length === 0) {
+        if (!egress.ports && !egress.to) {
             // Allow to all
             //todo special color
             const node = new Node("ALLOW TO ALL");
-            const inPort = node.addPort(new InPort("In"));
+            const inPort = node.addPort(new InPort("Any In"));
 
             const edge = new Edge(outPort, inPort);
             return [node, edge];
         }
 
         let toPorts: InPort[] = [];
-        egress.ports.forEach(port => {
-            //todo check if node already exist
-            const name = `:${port.port} ${port.protocol}`;
-            toPorts.push(new InPort(name));
-        });
+        if(egress.ports){
+            egress.ports.forEach(port => {
+                //todo check if node already exist
+                const name = `:${port.port} ${port.protocol}`;
+                toPorts.push(new InPort(name));
+            });
+        } else {
+            toPorts.push(new InPort("Any In"));
+        }
+
 
         const toNodes: Node[] = [];
         egress.to.forEach(peer => {
@@ -179,7 +194,7 @@ function networkPolicyPeerToNode(peer: NetworkPolicyPeer): Node {
 }
 
 function labelSelectorToLabels(labelSelector?: LabelSelector): string[] | null {
-    if (!labelSelector || Object.keys(labelSelector).length === 0) {
+    if (!labelSelector || !labelSelector.matchLabels) {
         return;
     }
 
@@ -209,7 +224,7 @@ export function setPositionForElements(elements: Elements) {
     elements.forEach(element => {
         if (element instanceof Node) {
             g.setNode(element.id, {
-                width: Math.max(150, element.data.name.length * 6),
+                width: Math.max(150, element.data.name.length * 7),
                 height: Math.max(40, 20 + element.data.ports.length * 15)
             });
         }
