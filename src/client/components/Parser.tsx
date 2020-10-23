@@ -171,7 +171,7 @@ function parseEgressRule(
 function networkPolicyPeerToNode(peer: NetworkPolicyPeer): Node {
     let name: string;
     if (peer.ipBlock) {
-        name = `From IPs - ${peer.ipBlock.cidr}`;
+        name = `IPs - ${peer.ipBlock.cidr}`;
         if (peer.ipBlock.except && peer.ipBlock.except.length !== 0) {
             name += `, except ${peer.ipBlock.except.join(", ")}`;
         }
