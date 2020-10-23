@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 module.exports = {
     entry: './src/client/main.tsx',
     output: {
-        filename: '[name].bundle.js',
+        filename: '[name].[contenthash].bundle.js',
         path: path.resolve(__dirname, 'dist'),
     },
     devtool: 'inline-source-map',
@@ -68,6 +68,8 @@ module.exports = {
                 "css": ["main.css"],
             }
         }),
-        new MiniCssExtractPlugin()
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash].css',
+        })
     ]
 };
