@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactFlow, {removeElements, addEdge, ReactFlowProvider} from "../../react-flow";
+import ReactFlow, {removeElements, addEdge, ReactFlowProvider, Elements} from "../../react-flow";
 import DefaultEdge from "./diagram/DefaultEdge";
 import DefaultNode from "./diagram/DefaultNode";
 import {NetworkPolicy} from "./NetworkPolicy";
@@ -7,10 +7,10 @@ import {networkPolicyToElements, setPositionForElements} from "./Parser";
 import {Sidebar} from "./Sidebar";
 
 export interface DiagramProps {
-    policy: NetworkPolicy,
+    elements: Elements,
 }
 
-export function Diagram({ policy }: DiagramProps) {
+export function Diagram({ elements }: DiagramProps) {
   const nodeTypes = {
     default: DefaultNode,
     input: DefaultNode,
@@ -20,10 +20,8 @@ export function Diagram({ policy }: DiagramProps) {
     default: DefaultEdge,
   };
 
-  const parsedElements = networkPolicyToElements(policy);
-  setPositionForElements(parsedElements)
 
-  // const [elements, setElements] = useState(parsedElements);
+
   //
   // const onElementsRemove = elementsToRemove =>
   //   setElements(els => removeElements(elementsToRemove, els));
@@ -33,7 +31,7 @@ export function Diagram({ policy }: DiagramProps) {
   return (
       <ReactFlowProvider>
         <ReactFlow
-          elements={parsedElements}
+          elements={elements}
           nodeTypes={nodeTypes}
           edgeTypes={edgeTypes}
           // onElementsRemove={onElementsRemove}

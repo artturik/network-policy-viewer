@@ -193,6 +193,12 @@ function networkPolicyPeerToNode(peer: NetworkPolicyPeer): Node {
     return new Node(name);
 }
 
+export function networkPolicyToElementsWithPosition(networkPolicy: NetworkPolicy): Elements {
+    const elements = networkPolicyToElements(networkPolicy);
+    setPositionForElements(elements);
+    return elements;
+}
+
 function labelSelectorToLabels(labelSelector?: LabelSelector): string[] | null {
     if (!labelSelector || !labelSelector.matchLabels) {
         return;

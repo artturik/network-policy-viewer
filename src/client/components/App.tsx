@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {Editor} from "./Editor";
 import { Sidebar } from "./Sidebar";
-import { parse } from "./Parser";
+import {networkPolicyToElements, networkPolicyToElementsWithPosition, parse, setPositionForElements} from "./Parser";
 import { Diagram } from "./Diagram";
 
 const defaultNetworkPolicy =
@@ -44,25 +44,36 @@ spec:
 
 export function App(){
     const [networkPolicy, setNetworkPolicy] = useState(defaultNetworkPolicy);
-    const [networkPolicyParsed, setNetworkPolicyParsed] = useState(parse(defaultNetworkPolicy));
+    const [elements, setElements] = useState(networkPolicyToElementsWithPosition(parse(defaultNetworkPolicy)));
 
     const onChange = (newNetworkPolicy) => {
         if(!newNetworkPolicy){
             return;
         }
         setNetworkPolicy(newNetworkPolicy);
+        
         const parsed = parse(newNetworkPolicy);
         if(!parsed){
-            alert('Error parsing NetworkPolicy');
+            alert('Error parsing NetworkPolicy manifest!');
+            return;
         }
-        setNetworkPolicyParsed(parsed);
+
+        let parsedElements;
+        try{
+            parsedElements = networkPolicyToElementsWithPosition(parsed);
+        } catch (e) {
+            alert('Can not visualize NetworkPolicy!');
+            console.error(e);
+            return;
+        }
+        setElements(parsedElements);
     };
 
 
     return (
         <main style={{ display: 'flex' }}>
             <div id="canvas" style={{ width: '60%' }}>
-                <Diagram policy={networkPolicyParsed}/>
+                <Diagram elements={elements}/>
             </div>
             <pre
                 style={{
