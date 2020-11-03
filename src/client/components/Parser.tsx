@@ -57,6 +57,9 @@ function parseIngressRule(
     namespace: string,
 ): Elements {
     const elements: Elements = [];
+    if(!ingresses){
+        ingresses = [];
+    }
     if(ingresses.length === 0){
         const port = new InPort("Any In");
         port.deny = true;
@@ -127,18 +130,21 @@ function parseEgressRule(
         outPort = new OutPort("Out");
         target.addPort(outPort);
     }
+
+    if(!egresses){
+        egresses = [];
+    }
+
     if(egresses.length === 0){
         outPort.deny = true;
     }
     for (const egress of egresses) {
-        if (!egress.ports && !egress.to) {
+        const toNodes: Node[] = [];
+        if (!egress.to) {
             // Allow to all
             //todo special color
             const node = new Node("ALLOW TO ALL");
-            const inPort = node.addPort(new InPort("Any In"));
-
-            const edge = new Edge(outPort, inPort);
-            return [node, edge];
+            toNodes.push(node);
         }
 
         let toPorts: InPort[] = [];
@@ -152,11 +158,12 @@ function parseEgressRule(
             toPorts.push(new InPort("Any In"));
         }
 
-
-        const toNodes: Node[] = [];
-        egress.to.forEach(peer => {
+        egress.to?.forEach(peer => {
             const node = networkPolicyPeerToNode(peer, namespace);
+            toNodes.push(node);
+        });
 
+        toNodes.forEach(node => {
             toPorts.forEach((port, index) => {
                 let newPort = node.getPortWithName(port.name);
                 if (!newPort) {
@@ -167,7 +174,6 @@ function parseEgressRule(
                     toPorts.push(newPort);
                 }
             });
-            toNodes.push(node);
         });
 
         const edges: Edge[] = [];
