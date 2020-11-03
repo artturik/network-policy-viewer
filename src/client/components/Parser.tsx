@@ -147,15 +147,15 @@ function parseEgressRule(
             toNodes.push(node);
         }
 
-        let toPorts: InPort[] = [];
+        let toPorts: string[] = [];
         if(egress.ports){
             egress.ports.forEach(port => {
                 //todo check if node already exist
                 const name = `:${port.port} ${port.protocol}`;
-                toPorts.push(new InPort(name));
+                toPorts.push(name);
             });
         } else {
-            toPorts.push(new InPort("Any In"));
+            toPorts.push("Any In");
         }
 
         egress.to?.forEach(peer => {
@@ -163,21 +163,20 @@ function parseEgressRule(
             toNodes.push(node);
         });
 
+        const portsOnNodes: InPort[] = [];
         toNodes.forEach(node => {
             toPorts.forEach((port, index) => {
-                let newPort = node.getPortWithName(port.name);
+                let newPort = node.getPortWithName(port);
                 if (!newPort) {
-                    node.addPort(port);
-                } else {
-                    // delete current port
-                    toPorts.splice(index, 1);
-                    toPorts.push(newPort);
+                    newPort = new InPort(port);
+                    node.addPort(newPort);
                 }
+                portsOnNodes.push(newPort);
             });
         });
 
         const edges: Edge[] = [];
-        toPorts.forEach(toPort => {
+        portsOnNodes.forEach(toPort => {
               edges.push(new Edge(outPort, toPort));
         });
 
