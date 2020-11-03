@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import ReactHintFactory from 'react-hint'
 import {Editor} from "./Editor";
+import {ErrorNotification} from "./ErrorNotification";
 import { Sidebar } from "./Sidebar";
 import { networkPolicyToElementsWithPosition, parse} from "./Parser";
 import { Diagram } from "./Diagram";
@@ -48,6 +49,7 @@ spec:
 export function App(){
     const [networkPolicy, setNetworkPolicy] = useState(defaultNetworkPolicy);
     const [elements, setElements] = useState(networkPolicyToElementsWithPosition(parse(defaultNetworkPolicy)));
+    const [error, setError] = useState('');
 
     const onChange = (newNetworkPolicy) => {
         if(!newNetworkPolicy){
@@ -57,7 +59,7 @@ export function App(){
 
         const parsed = parse(newNetworkPolicy);
         if(!parsed){
-            alert('Error parsing NetworkPolicy manifest!');
+            setError('Error parsing NetworkPolicy manifest!');
             return;
         }
 
@@ -65,16 +67,18 @@ export function App(){
         try{
             parsedElements = networkPolicyToElementsWithPosition(parsed);
         } catch (e) {
-            alert('Can not visualize NetworkPolicy!');
+            setError('Can not visualize NetworkPolicy!');
             console.error(e);
             return;
         }
         setElements(parsedElements);
+        setError('');
     };
 
 
     return (
         <main style={{ display: 'flex' }}>
+            <ErrorNotification text={error}/>
             <ReactHint autoPosition events />
             <div id="canvas" style={{ width: '60%' }}>
                 <Diagram elements={elements}/>
