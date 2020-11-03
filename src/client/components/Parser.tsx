@@ -28,6 +28,7 @@ export function networkPolicyToElements(policy: NetworkPolicy): Elements {
         ? policy.spec.policyTypes
         : ["Ingress"];
 
+    const namespace = policy.metadata.namespace || "default";
     const targetLabels = labelSelectorToLabels(policy.spec.podSelector);
     // todo special node color
     let target = new Node(
@@ -36,14 +37,15 @@ export function networkPolicyToElements(policy: NetworkPolicy): Elements {
     if (targetLabels) {
         target = new Node(`Pods with label - ${targetLabels.join(" ")}`);
     }
+    target.data.isPartOfNetworkPolicy = true;
     result.push(target);
 
     if (policyTypes.includes("Ingress")) {
-        result.push(...parseIngressRule(policy.spec.ingress, target));
+        result.push(...parseIngressRule(policy.spec.ingress, target, namespace));
     }
 
     if (policyTypes.includes("Egress")) {
-        result.push(...parseEgressRule(policy.spec.egress, target, result));
+        result.push(...parseEgressRule(policy.spec.egress, target, result, namespace));
     }
 
     return result;
@@ -51,9 +53,15 @@ export function networkPolicyToElements(policy: NetworkPolicy): Elements {
 
 function parseIngressRule(
     ingresses: NetworkPolicyIngressRule[],
-    target: Node
+    target: Node,
+    namespace: string,
 ): Elements {
     const elements: Elements = [];
+    if(ingresses.length === 0){
+        const port = new InPort("Any In");
+        port.deny = true;
+        target.addPort(port);
+    }
     for (const ingress of ingresses) {
         if (!ingress.ports && !ingress.from) {
             // From all to target
@@ -90,7 +98,7 @@ function parseIngressRule(
         const fromNodes: Node[] = [];
         const fromPorts: OutPort[] = [];
         ingress.from.forEach(peer => {
-            const node = networkPolicyPeerToNode(peer);
+            const node = networkPolicyPeerToNode(peer, namespace);
             fromPorts.push(node.addPort(new OutPort("Out")));
             fromNodes.push(node);
         });
@@ -111,12 +119,16 @@ function parseEgressRule(
     egresses: NetworkPolicyEgressRule[],
     target: Node,
     existingElements: Elements,
+    namespace: string,
 ): Elements {
     const elements: Elements = [];
     let outPort = target.getPortWithName("Out");
     if (!outPort) {
         outPort = new OutPort("Out");
         target.addPort(outPort);
+    }
+    if(egresses.length === 0){
+        outPort.deny = true;
     }
     for (const egress of egresses) {
         if (!egress.ports && !egress.to) {
@@ -143,7 +155,7 @@ function parseEgressRule(
 
         const toNodes: Node[] = [];
         egress.to.forEach(peer => {
-            const node = networkPolicyPeerToNode(peer);
+            const node = networkPolicyPeerToNode(peer, namespace);
 
             toPorts.forEach((port, index) => {
                 let newPort = node.getPortWithName(port.name);
@@ -168,7 +180,7 @@ function parseEgressRule(
     return elements;
 }
 
-function networkPolicyPeerToNode(peer: NetworkPolicyPeer): Node {
+function networkPolicyPeerToNode(peer: NetworkPolicyPeer, currentNamespace: string): Node {
     let name: string;
     if (peer.ipBlock) {
         name = `IPs - ${peer.ipBlock.cidr}`;
@@ -180,14 +192,23 @@ function networkPolicyPeerToNode(peer: NetworkPolicyPeer): Node {
         const parts: string[] = [];
         const podLabels = labelSelectorToLabels(peer.podSelector);
         if (podLabels && podLabels.length !== 0) {
-            parts.push(`with label ${podLabels.join(",")}`);
-        }
-        const namespaceLabels = labelSelectorToLabels(peer.namespaceSelector);
-        if (namespaceLabels && namespaceLabels.length !== 0) {
-            parts.push(`in namespace with labels ${namespaceLabels.join(",")}`);
+            parts.push(`with label ${podLabels.join(", ")}`);
+        } else if (peer.podSelector !== undefined){
+            name = "All pods "
         }
 
-        name += parts.join(" and ");
+        const namespaceLabels = labelSelectorToLabels(peer.namespaceSelector);
+        if (namespaceLabels && namespaceLabels.length !== 0) {
+            parts.push(`in namespace with labels ${namespaceLabels.join(", ")}`);
+        } else if (peer.namespaceSelector !== undefined) {
+            parts.push('in any namespace')
+        }
+
+        if(parts.length > 0){
+            name += parts.join(" and ");
+        } else {
+            name += `in namespace ${currentNamespace}`
+        }
     }
 
     return new Node(name);

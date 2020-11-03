@@ -1,9 +1,12 @@
 import React, {useState} from "react";
+import ReactHintFactory from 'react-hint'
 import {Editor} from "./Editor";
 import { Sidebar } from "./Sidebar";
-import {networkPolicyToElements, networkPolicyToElementsWithPosition, parse, setPositionForElements} from "./Parser";
+import { networkPolicyToElementsWithPosition, parse} from "./Parser";
 import { Diagram } from "./Diagram";
+import 'react-hint/css/index.css'
 
+const ReactHint = ReactHintFactory(React);
 const defaultNetworkPolicy =
 `apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -51,7 +54,7 @@ export function App(){
             return;
         }
         setNetworkPolicy(newNetworkPolicy);
-        
+
         const parsed = parse(newNetworkPolicy);
         if(!parsed){
             alert('Error parsing NetworkPolicy manifest!');
@@ -72,6 +75,7 @@ export function App(){
 
     return (
         <main style={{ display: 'flex' }}>
+            <ReactHint autoPosition events />
             <div id="canvas" style={{ width: '60%' }}>
                 <Diagram elements={elements}/>
             </div>

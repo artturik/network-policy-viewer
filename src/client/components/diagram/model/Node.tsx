@@ -6,6 +6,7 @@ import { Node as NodeInterface, XYPosition } from "../../../../react-flow";
 export class Node implements NodeInterface {
      id: string;
      data: NodeData = {
+          isPartOfNetworkPolicy: false,
           name: '',
           ports: [],
      }

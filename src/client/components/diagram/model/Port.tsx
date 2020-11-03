@@ -11,6 +11,7 @@ export class Port {
      private readonly uid: string;
      type: PortType;
      name: string;
+     deny: boolean;
      private node?: Node;
 
      constructor(name: string, type: PortType, id?: string) {
@@ -21,6 +22,7 @@ export class Port {
           }
           this.id = id;
           this.uid = id;
+          this.deny = false;
      }
 
      setNode(node: Node){

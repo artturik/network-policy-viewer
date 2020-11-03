@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import React, {memo} from 'react';
-import {Position, Handle, useStoreState} from '../../../react-flow';
+import {useStoreState} from '../../../react-flow';
 import {NodeProps} from './model/NodeProps';
 import {PortType} from "./model/Port";
 import cc from 'classcat';
+import { EmptyPort } from "./ports/EmptyPort";
+import {PortComponent} from "./ports/PortComponent";
 
 export const Title = styled.div`
 		background: rgba(0, 0, 0, 0.3);
@@ -40,6 +42,20 @@ export const PortLabel = styled.div`
 		align-items: center;
 	`;
 
+export const PortLabelIcon = styled.div`
+		display: flex;
+		margin-top: 2px;
+		margin-left: 4px;
+		align-items: center;
+	`;
+
+export const PortLabelIconRight = styled.div`
+		display: flex;
+		margin-top: 2px;
+		margin-right: 4px;
+		align-items: center;
+	`;
+
 export const Label = styled.div`
 		padding: 0 5px;
 		flex-grow: 1;
@@ -48,71 +64,33 @@ export const Label = styled.div`
 export default memo(({ data, id } : NodeProps) => {
     const connectionPending = useStoreState(state => state.connectionPending);
     const connectionOnlyNodeId = useStoreState(state => state.connectionOnlyNodeId);
+    const inputs = data.ports.filter(port => port.type === PortType.TARGET);
+    const outputs = data.ports.filter(port => port.type === PortType.SOURCE);
 
     const handleClasses = cc(['port', {
         "react-flow__handle-connecting" : connectionPending && connectionOnlyNodeId !== id,
     }]);
     return (
-        <>
+        <div style={{
+            backgroundColor: data.isPartOfNetworkPolicy ? 'rgb(192,255,0)' : ''
+        }}>
             <Title>
                 <TitleName>{ data.name }</TitleName>
             </Title>
             <Ports>
                 <PortsContainer>
-                    { data.ports
-                        .filter(port => port.type === PortType.TARGET)
-                        .map(port => {
-                            return (
-                                <PortLabel key={port.id}>
-                                    <div>
-                                        <Handle
-                                            id={port.id}
-                                            className={handleClasses}
-                                            type="target"
-                                            position={Position.Left}
-                                            isValidConnection={(connection) => {
-                                                if(connection.sourceNodeId === connection.targetNodeId){
-                                                    return false;
-                                                }
-
-                                                return !connection.toTarget;
-                                            }}
-                                        />
-                                    </div>
-                                    <Label>{port.name}</Label>
-                                </PortLabel>
-                            );
-                        })
+                    { inputs.length === 0 && data.isPartOfNetworkPolicy &&
+                        <EmptyPort type={PortType.TARGET}/>
                     }
+                    { inputs.map(port => <PortComponent key={port.id} port={port} handleClasses={handleClasses} />)}
                 </PortsContainer>
                 <PortsContainer>
-                    { data.ports
-                        .filter(port => port.type === PortType.SOURCE)
-                        .map(port => {
-                            return (
-                                <PortLabel key={port.id}>
-                                    <Label>{port.name}</Label>
-                                    <div>
-                                        <Handle
-                                            id={port.id}
-                                            className={handleClasses}
-                                            type="source"
-                                            position={Position.Right}
-                                            isValidConnection={(connection) => {
-                                                if(connection.sourceNodeId === connection.targetNodeId){
-                                                    return false;
-                                                }
-
-                                                return connection.toTarget;
-                                            }}
-                                        />
-                                    </div>
-                                </PortLabel>
-                            );
-                        })
+                    { outputs.length === 0 && data.isPartOfNetworkPolicy &&
+                        <EmptyPort type={PortType.SOURCE}/>
                     }
+                    { outputs.map(port => <PortComponent key={port.id} port={port} handleClasses={handleClasses} />)}
                 </PortsContainer>
             </Ports>
-        </>
+        </div>
     );
 });
