@@ -1,7 +1,7 @@
 Network Policy Viewer
 ===
 
-[DEMO](https://artturik.github.io/network-policy-viewer/)
+[ONLINE VERSION](https://artturik.github.io/network-policy-viewer/)
 
 ![NetworkPolicy viewer screenshot](img/demo.png?raw=true "NetworkPolicy viewer screenshot")
 
