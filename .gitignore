@@ -2,3 +2,5 @@ node_modules
 dist
 *.iml
 swagger-raw.json
+.DS_Store
+.idea

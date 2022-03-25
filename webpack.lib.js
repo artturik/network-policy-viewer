@@ -1,14 +1,14 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
-const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = merge(common, {
+    mode: "production",
     entry: {
-        index: './index.tsx',
+        index: './src/index.tsx',
     },
     output: {
         filename: '[name].js',

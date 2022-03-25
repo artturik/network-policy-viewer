@@ -23,7 +23,9 @@ npm install network-policy-viewer
 NetworkPolicyViewer can be used as React component, see the sample below or [view demo source code](src/client/components/App.tsx)
 
 ```jsx
-import { render } from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { NetworkPolicyViewer } from "network-policy-viewer";
 
 const networkPolicy = `
 apiVersion: networking.k8s.io/v1
@@ -36,12 +38,12 @@ spec:
   - Ingress
 `;
 
-render(
+ReactDOM.render(
     <NetworkPolicyViewer
         networkPolicy={networkPolicy}
         style={{ display: "flex", width: "100%", height: '100vh' }}
         canvasStyle={{ width: "100%", height: '100vh'}}
-    />, 
+    />,
     document.getElementById('root')
 );
 ```

@@ -3,26 +3,30 @@
   "compilerOptions": {
     "outDir": "lib",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "suppressExcessPropertyErrors": true,
     "declaration": true,
     "strictNullChecks": false,
     "sourceMap": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "target": "es6",
-    "module": "es6",
+    "target": "esnext",
+    "module": "esnext",
     "noImplicitAny": false,
     "moduleResolution": "node",
     "strict": false,
     "lib": [
-      "DOM",
-      "ES6"
+      "dom",
+      "esnext"
     ]
   },
   "include": [
     "./src"
   ],
   "exclude": [
-
+     "node_modules",
+     "lib",
+     "dist",
+     "docs",
   ]
 }
