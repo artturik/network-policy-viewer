@@ -15,7 +15,7 @@ import {
 
 export function parse(manifest: string): NetworkPolicy {
     try {
-        return new NetworkPolicy(JSON.stringify(yaml.safeLoad(manifest)));
+        return new NetworkPolicy(JSON.stringify(yaml.load(manifest, {})));
     } catch (e) {
         console.error(e);
     }

@@ -1,15 +1,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "outDir": "lib",
     "esModuleInterop": true,
     "suppressExcessPropertyErrors": true,
-    "declaration": false,
+    "declaration": true,
     "strictNullChecks": false,
     "sourceMap": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "target": "ES6",
-    "module": "commonjs",
+    "target": "es6",
+    "module": "es6",
+    "noImplicitAny": false,
+    "moduleResolution": "node",
     "strict": false,
     "lib": [
       "DOM",

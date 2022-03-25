@@ -1,13 +1,8 @@
-import React, {useState} from "react";
-import ReactHintFactory from 'react-hint'
-import {Editor} from "./Editor";
-import {ErrorNotification} from "./ErrorNotification";
-import { Sidebar } from "./Sidebar";
-import { networkPolicyToElementsWithPosition, parse} from "./Parser";
-import { Diagram } from "./Diagram";
-import 'react-hint/css/index.css'
+import React, { useState } from "react";
+import { Editor } from "./Editor";
+import { NetworkPolicyViewer } from "./NetworkPolicyViewer";
+import "github-fork-ribbon-css/gh-fork-ribbon.css"
 
-const ReactHint = ReactHintFactory(React);
 const defaultNetworkPolicy =
 `apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -45,44 +40,23 @@ spec:
       port: 5978
 `;
 
-
 export function App(){
     const [networkPolicy, setNetworkPolicy] = useState(defaultNetworkPolicy);
-    const [elements, setElements] = useState(networkPolicyToElementsWithPosition(parse(defaultNetworkPolicy)));
-    const [error, setError] = useState('');
 
     const onChange = (newNetworkPolicy) => {
         if(!newNetworkPolicy){
             return;
         }
         setNetworkPolicy(newNetworkPolicy);
-
-        const parsed = parse(newNetworkPolicy);
-        if(!parsed){
-            setError('Error parsing NetworkPolicy manifest!');
-            return;
-        }
-
-        let parsedElements;
-        try{
-            parsedElements = networkPolicyToElementsWithPosition(parsed);
-        } catch (e) {
-            setError('Can not visualize NetworkPolicy!');
-            console.error(e);
-            return;
-        }
-        setElements(parsedElements);
-        setError('');
     };
-
 
     return (
         <main style={{ display: 'flex' }}>
-            <ErrorNotification text={error}/>
-            <ReactHint autoPosition events />
-            <div id="canvas" style={{ width: '60%' }}>
-                <Diagram elements={elements}/>
-            </div>
+            <NetworkPolicyViewer
+                networkPolicy={networkPolicy}
+                style={{ display: "flex", width: "60%", height: '100vh' }}
+                canvasStyle={{ width: "100%", height: '100vh'}}
+            />
             <pre
                 style={{
                     width: '40%',
