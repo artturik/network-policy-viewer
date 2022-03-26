@@ -31,15 +31,11 @@ export class ObjectMeta {
         this.uid = source["uid"];
         this.resourceVersion = source["resourceVersion"];
         this.generation = source["generation"];
-        this.creationTimestamp = this.convertValues(source["creationTimestamp"], Time);
-        this.deletionTimestamp = this.convertValues(source["deletionTimestamp"], Time);
         this.deletionGracePeriodSeconds = source["deletionGracePeriodSeconds"];
         this.labels = source["labels"];
         this.annotations = source["annotations"];
-        this.ownerReferences = this.convertValues(source["ownerReferences"], OwnerReference);
         this.finalizers = source["finalizers"];
         this.clusterName = source["clusterName"];
-        this.managedFields = this.convertValues(source["managedFields"], ManagedFieldsEntry);
     }
 
     convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -401,8 +397,6 @@ export class NetworkPolicy {
         this.kind = source["kind"];
         this.apiVersion = source["apiVersion"];
         this.metadata = this.convertValues(source["metadata"], ObjectMeta);
-        this.ownerReferences = this.convertValues(source["ownerReferences"], OwnerReference);
-        this.managedFields = this.convertValues(source["managedFields"], ManagedFieldsEntry);
         this.spec = this.convertValues(source["spec"], NetworkPolicySpec);
     }
 

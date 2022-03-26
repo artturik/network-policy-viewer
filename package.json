@@ -1,6 +1,6 @@
 {
   "name": "network-policy-viewer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "Artur Babyuk (https://github.com/artturik)",
   "description": "Kubernetes NetworkPolicy viewer",
   "repository": {
@@ -22,7 +22,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "webpack": "webpack --watch --config webpack.dev.js",
+    "dev": "webpack --watch --config webpack.dev.js",
     "prod": "webpack --config webpack.prod.js",
     "lib": "webpack --config webpack.lib.js",
     "semantic-release": "semantic-release"
