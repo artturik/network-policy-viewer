@@ -26,6 +26,7 @@ NetworkPolicyViewer can be used as React component, see the sample below or [vie
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { NetworkPolicyViewer } from "network-policy-viewer";
+import "network-policy-viewer/index.css"
 
 const networkPolicy = `
 apiVersion: networking.k8s.io/v1

@@ -91,5 +91,5 @@ export interface StoreModel {
     zoomOut: Thunk<StoreModel>;
 }
 export declare const storeModel: StoreModel;
-declare const store: import("easy-peasy").Store<StoreModel, import("easy-peasy").EasyPeasyConfig<{}, any>>;
+declare const store: import("easy-peasy").Store<StoreModel, import("easy-peasy").EasyPeasyConfig<undefined, {}>>;
 export default store;

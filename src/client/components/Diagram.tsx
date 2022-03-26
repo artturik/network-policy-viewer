@@ -1,5 +1,5 @@
 import React from "react";
-import ReactFlow, { ReactFlowProvider, Elements } from "../../react-flow";
+import ReactFlow, { Elements } from "../../react-flow";
 import DefaultEdge from "./diagram/DefaultEdge";
 import DefaultNode from "./diagram/DefaultNode";
 
@@ -18,12 +18,10 @@ export function Diagram({ elements }: DiagramProps) {
   };
 
   return (
-      <ReactFlowProvider>
-        <ReactFlow
-          elements={elements}
-          nodeTypes={nodeTypes}
-          edgeTypes={edgeTypes}
-        />
-      </ReactFlowProvider>
+    <ReactFlow
+      elements={elements}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+    />
   );
 }
