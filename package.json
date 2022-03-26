@@ -1,6 +1,6 @@
 {
   "name": "network-policy-viewer",
-  "version": "1.0.2-fix9",
+  "version": "1.0.2",
   "author": "Artur Babyuk (https://github.com/artturik)",
   "description": "Kubernetes NetworkPolicy viewer",
   "repository": {
