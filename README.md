@@ -12,6 +12,10 @@ just Copy and Paste YAML to the editor and receive instant visualisation
 This, hopefully, can help you find issues with NetworkPolicies
 or understand NetworkPolicy concept better 
 
+## Related projects
+
+* [NetworkPolicy Viewer as Lens IDE extension](https://github.com/artturik/lens-extension-network-policy-viewer)
+
 ## Installation
 
 ```bash
