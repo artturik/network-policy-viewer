@@ -10,5 +10,6 @@ export declare class Node implements NodeInterface {
     addPort(port: Port): Port;
     getPortWithName(name: string): Port | null;
     setPorts(ports: Port[]): void;
+    setName(name: string): void;
     getPorts(): Port[];
 }

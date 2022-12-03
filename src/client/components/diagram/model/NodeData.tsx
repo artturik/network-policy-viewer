@@ -1,7 +1,12 @@
 import { Port } from "./Port";
+import { Pod } from "../../models/Pod";
 
 export interface NodeData {
-    isPartOfNetworkPolicy: boolean,
-    name: string,
-    ports: Port[];
+  isPartOfNetworkPolicy: boolean;
+  isPodTarget: boolean;
+  podSelector: string[];
+  namespaceSelector: string[];
+  matchingPods: Pod[];
+  name: string;
+  ports: Port[];
 }

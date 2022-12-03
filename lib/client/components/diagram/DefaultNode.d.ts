@@ -1,6 +1,10 @@
-import React from 'react';
-import { NodeProps } from './model/NodeProps';
+import React from "react";
+import { NodeProps } from "./model/NodeProps";
 export declare const Title: import("@emotion/styled").StyledComponent<{
+    theme?: import("@emotion/react").Theme;
+    as?: React.ElementType<any>;
+}, React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, {}>;
+export declare const Pods: import("@emotion/styled").StyledComponent<{
     theme?: import("@emotion/react").Theme;
     as?: React.ElementType<any>;
 }, React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, {}>;
