@@ -1,0 +1,10 @@
+.react-tabs__tab-list {
+    margin: 0;
+    background: #272822;
+    color: #f8f8f2;
+}
+
+.react-tabs__tab--selected {
+    background: #272822;
+    color: #f8f8f2;
+}
