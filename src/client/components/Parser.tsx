@@ -319,7 +319,12 @@ export function addPodsInfoToNodes(
               return false;
             }
             const [key, value] = nsSelector.split("=");
-            return ns.metadata.labels[key] && ns.metadata.labels[key] === value;
+            return (
+              ns.metadata &&
+              ns.metadata.labels &&
+              ns.metadata.labels[key] &&
+              ns.metadata.labels[key] === value
+            );
           });
         }
       });
@@ -332,7 +337,12 @@ export function addPodsInfoToNodes(
         }
         const [key, value] = podSelector.split("=");
         filteredPods = filteredPods.filter((pod) => {
-          return pod.metadata.labels[key] && pod.metadata.labels[key] === value;
+          return (
+            pod.metadata &&
+            pod.metadata.labels &&
+            pod.metadata.labels[key] &&
+            pod.metadata.labels[key] === value
+          );
         });
       });
     }
