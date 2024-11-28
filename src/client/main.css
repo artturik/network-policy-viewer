@@ -9,7 +9,7 @@
     height: 100%;
 }
 
-#canvas {
+.network-policy-viewer-canvas {
     /*height: 100%;*/
     background-color: rgb(60, 60, 60);
     background-size: 50px 50px;

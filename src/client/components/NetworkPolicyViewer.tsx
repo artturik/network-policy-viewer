@@ -66,7 +66,7 @@ export function NetworkPolicyViewer({
       {error === "" && (
         <>
           <ReactHint autoPosition events />
-          <div id="canvas" style={canvasStyle}>
+          <div class="network-policy-viewer-canvas" style={canvasStyle}>
             <Diagram elements={parsedElements} />
           </div>
         </>

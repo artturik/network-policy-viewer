@@ -1,6 +1,6 @@
 {
   "name": "network-policy-viewer",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": "Artur Babyuk (https://github.com/artturik)",
   "description": "Kubernetes NetworkPolicy viewer",
   "repository": {
@@ -89,7 +89,7 @@
     "react": "^17.0.2",
     "react-ace": "^9.5.0",
     "react-dom": "^17.0.2",
-    "semantic-release": "^19.0.2",
+    "semantic-release": "^24.2.0",
     "source-map-loader": "^3.0.1",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.1",

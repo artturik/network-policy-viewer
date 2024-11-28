@@ -1,5 +1,5 @@
 import React from "react";
-import ReactFlow, {Elements, OnLoadParams} from "../../react-flow";
+import ReactFlow, {Elements, OnLoadParams, ReactFlowProvider} from "../../react-flow";
 import DefaultEdge from "./diagram/DefaultEdge";
 import DefaultNode from "./diagram/DefaultNode";
 
@@ -17,11 +17,13 @@ export function Diagram({ elements }: DiagramProps) {
     default: DefaultEdge,
   };
   return (
-    <ReactFlow
-      elements={elements}
-      nodeTypes={nodeTypes}
-      edgeTypes={edgeTypes}
-      onLoad={(reactFlowInstance: OnLoadParams) => reactFlowInstance.fitView()}
-    />
-  );
+    <ReactFlowProvider>
+      <ReactFlow
+        elements={elements}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onLoad={(reactFlowInstance: OnLoadParams) => reactFlowInstance.fitView()}
+      />
+    </ReactFlowProvider>
+    );
 }
